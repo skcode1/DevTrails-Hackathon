@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 
 // FIXED: Changed ../ to ./ because these folders are inside the same src directory
-import Sidebar from "../components/layout/Sidebar";
-import Navbar from "../components/layout/Navbar";
+import Sidebar from "./components/layout/Sidebar";
+import Navbar from "./components/layout/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Pricing from "./pages/Pricing";
 import FraudReview from "./pages/FraudReview";
