@@ -5,11 +5,22 @@ import numpy as np
 from markov_lr import generate_synthetic_data,train_models
 from models import run_engine,fraud_check
 
+from fastapi.middleware.cors import CORSMiddleware
+
+
+
 lr_models={}
 
 app=FastAPI(
     title="Weekly Income Insurance — Pricing Engine",
     version="1.0.0",
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
 )
 
 @app.on_event("startup")
