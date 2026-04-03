@@ -5,13 +5,16 @@ import MarkovStateTable from "../components/pricing/MarkovStateTable";
 import { usePricing } from "../hooks/usePricing";
 
 const PRICING_CONFIG = {
-  MIN_S0_RECORDS: 14,
-  LAMBDA: 0.3,
-  ALPHA: 0.95,
+  "MIN_S₀_RECORDS": 14,
+  λ: 0.3,
+  α: 0.95,
   LABELS: {
-    headerDesc: "Personalized premiums powered by mu_i, sigma_i baseline distributions.",
-    markovNote: "Transitions modeled via dynamic P_ij softmax adjustment.",
-    historyNote: (count) => `Min. ${count} undisrupted (S0) weekly records required for sigma_i stability.`
+    // RECTIFIED: Using Unicode μᵢ, σᵢ
+    headerDesc: "Personalized premiums powered by μᵢ, σᵢ baseline distributions.",
+    // RECTIFIED: Using Unicode Pᵢⱼ
+    markovNote: "Transitions modeled via dynamic Pᵢⱼ softmax adjustment.",
+    // RECTIFIED: Using Unicode σ̂ᵢ and S₀
+    historyNote: (count) => `Min. ${count} undisrupted (S₀) weekly records required for σ̂ᵢ stability.`
   }
 };
 
@@ -40,9 +43,9 @@ export default function Pricing() {
 
         <div className="flex items-center gap-3 bg-white p-2 rounded-2xl shadow-sm border border-slate-200/50">
           {/* RECTIFIED: Unicode S₀ and π̄ */}
-          <StatusPill color="bg-emerald-500" label="S0 Verified" />
+          <StatusPill color="bg-emerald-500" label="S₀ Verified" />
           <div className="h-4 w-[1px] bg-slate-200" />
-          <StatusPill color="bg-cyan-500" label="pi-bar Active" />
+          <StatusPill color="bg-cyan-500" label="π̄ Active" />
         </div>
       </header>
 
@@ -69,7 +72,7 @@ export default function Pricing() {
                 <div className="relative z-10 flex items-start gap-3">
                    <Activity className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
                    <p className="text-[10px] text-slate-300 font-mono leading-relaxed">
-                     {PRICING_CONFIG.LABELS.historyNote(PRICING_CONFIG.MIN_S0_RECORDS)}
+                     {PRICING_CONFIG.LABELS.historyNote(PRICING_CONFIG["MIN_S₀_RECORDS"])}
                    </p>
                 </div>
               </div>
@@ -85,8 +88,9 @@ export default function Pricing() {
                 <p className="text-xl font-bold tracking-tight leading-tight">Entropy Loading: Enabled</p>
               </div>
               <div className="flex flex-wrap gap-2">
-                <ParamBadge label={`lambda = ${PRICING_CONFIG.LAMBDA}`} />
-                <ParamBadge label={`alpha = ${PRICING_CONFIG.ALPHA}`} />
+                {/* RECTIFIED: Unicode λ and α */}
+                <ParamBadge label={`λ = ${PRICING_CONFIG.λ}`} />
+                <ParamBadge label={`α = ${PRICING_CONFIG.α}`} />
                 <ParamBadge label="GATE: ACTIVE" />
               </div>
             </div>

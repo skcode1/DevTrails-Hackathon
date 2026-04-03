@@ -107,7 +107,7 @@ export default function Dashboard() {
             <div className="p-8 border-b border-slate-200/50 flex items-center justify-between">
               <div>
                <h3 className="text-xl font-black !text-black opacity-100 italic tracking-tight leading-none">
-  State Probability Distribution (pi-bar)
+  State Probability Distribution (π̄)
 </h3>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Markov Week-Averaged Vector</p>
               </div>
