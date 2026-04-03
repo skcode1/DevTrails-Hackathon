@@ -30,7 +30,7 @@ export default function EarningsUploadForm({ onSubmit, isLoading }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-slate-800">
           <Coins className="w-4 h-4 text-cyan-600" />
-          <span className="text-sm font-bold tracking-tight">Dataset: $s_0$ Records</span>
+          <span className="text-sm font-bold tracking-tight">Dataset: S₀ Records</span>
         </div>
         <div className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-bold transition-colors ${
           isComplete ? "bg-emerald-50 text-emerald-600" : "bg-slate-100 text-slate-500"
@@ -67,9 +67,10 @@ export default function EarningsUploadForm({ onSubmit, isLoading }) {
       {!isComplete && inputValue !== "" && (
         <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-50 border border-amber-100 text-amber-700">
           <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-          <p className="text-[11px] leading-relaxed font-medium">
-            {String.raw`Insufficient data for Layer 1 ($\hat{\sigma}_i$) stability. Please provide at least ${MIN_RECORDS - recordCount} more records.`}
-          </p>
+         <p className="text-[11px] leading-relaxed font-medium">
+  Insufficient data for Layer 1 (σ̂ᵢ) stability. 
+  Please provide at least {MIN_RECORDS - recordCount} more records.
+</p>
         </div>
       )}
 

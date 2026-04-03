@@ -43,22 +43,39 @@ export default function MetricCard({
         )}
       </div>
 
-      <div className="mt-4 space-y-1">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-          {title}
+
+   
+
+
+      <div className="group relative p-6 bg-white rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:border-slate-300 transition-all duration-500 overflow-hidden">
+  {/* Subtle background accent for the forensic look */}
+  <div className="absolute top-0 right-0 w-24 h-24 bg-slate-50 rounded-full blur-3xl -mr-12 -mt-12 opacity-50 group-hover:bg-emerald-50 transition-colors" />
+
+  <div className="relative z-10 space-y-3">
+    {/* 1. Header: Label with extreme tracking */}
+    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em] leading-none">
+      {title}
+    </p>
+
+    {/* 2. Value: High contrast, italic, black */}
+    <div className="flex items-baseline gap-2">
+      <h3 className="text-3xl font-black !text-black italic tracking-tighter tabular-nums leading-none">
+        {value}
+      </h3>
+      {/* Visual indicator for "Live/Synced" status */}
+      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)] mb-1" />
+    </div>
+
+    {/* 3. Description: Smaller, cleaner, muted */}
+    {description && (
+      <div className="pt-2 border-t border-slate-50">
+        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wide leading-relaxed italic opacity-70">
+          {description}
         </p>
-        <div className="flex items-baseline gap-2">
-          <h3 className="text-2xl font-bold text-slate-900 tracking-tight">
-            {value}
-          </h3>
-        </div>
-        
-        {description && (
-          <p className="text-[11px] text-slate-400 font-medium leading-relaxed">
-            {description}
-          </p>
-        )}
       </div>
+    )}
+  </div>
+</div>
     </div>
   );
 }

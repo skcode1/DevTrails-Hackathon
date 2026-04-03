@@ -123,7 +123,7 @@ export default function FraudReview() {
           <div className="px-4 flex justify-between items-end">
             <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.25em]">Forensic Investigation</h3>
             <span className="flex items-center gap-2 text-[10px] font-bold text-cyan-600 uppercase italic">
-              <span className="h-1.5 w-1.5 bg-cyan-500 rounded-full animate-pulse" /> Focus: Active Selection
+              
             </span>
           </div>
           

@@ -78,7 +78,7 @@ export default function RiderProfile() {
         <aside className="lg:col-span-4 space-y-8">
           <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] px-2">Layer 1 Baselines</h3>
           
-          <div className="space-y-6">
+          <div className="space-y-6" opacity-100 text-black font-black>
             <MetricCard 
               title="Sample Mean (μ̂ᵢ)" 
               value={RIDER_DATA.metrics.mu} 

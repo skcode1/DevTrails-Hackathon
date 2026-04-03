@@ -86,37 +86,37 @@ export default function ClaimReviewCard({ claim }) {
         </div>
 
         {/* Step 2: State Fabrication Test */}
-        <div className="space-y-4 border-l border-slate-100 pl-8">
-          <div className="flex items-center gap-2">
-            <div className={`p-1.5 rounded-md ${isStateFlagged ? 'bg-rose-100 text-rose-600' : 'bg-slate-100 text-slate-400'}`}>
-              <BarChart3 className="w-4 h-4" />
+          <div className="space-y-4 border-l border-slate-100 pl-8">
+            <div className="flex items-center gap-2">
+              <div className={`p-1.5 rounded-md ${isStateFlagged ? 'bg-rose-100 text-rose-600' : 'bg-slate-100 text-slate-400'}`}>
+                <BarChart3 className="w-4 h-4" />
+              </div>
+              <span className="text-xs font-black !text-black uppercase tracking-tight italic">Step 2: State Test</span>
             </div>
-            <span className="text-xs font-black !text-black uppercase tracking-tight italic">Step 2: State Test</span>
-          </div>
 
-          <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-            <div className="flex justify-between items-baseline mb-2">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Lambda Λ Ratio</span>
-              <span className={`text-lg font-mono font-bold ${isStateFlagged ? 'text-rose-600' : 'text-slate-900'}`}>
-                {(data.lambdaRatio || 0).toFixed(2)}
-              </span>
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+              <div className="flex justify-between items-baseline mb-2">
+                <span className="text-[10px] font-bold text-slate-400 uppercase">Lambda (Λ) Ratio</span>
+                <span className={`text-lg font-mono font-bold ${isStateFlagged ? 'text-rose-600' : 'text-slate-900'}`}>
+                  {(data.lambdaRatio || 0).toFixed(2)}
+                </span>
+              </div>
+              <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden mb-2 rotate-180">
+                <div 
+                  className={`h-full transition-all duration-1000 ${isStateFlagged ? 'bg-rose-500' : 'bg-emerald-500'}`} 
+                  style={{ width: `${(1 - (data.lambdaRatio || 0)) * 100}%` }} 
+                />
+              </div>
+              <p className="text-[10px] font-bold text-slate-500 italic mt-2">
+                Λ = Predicted State Prob. / Observed Trace
+              </p>
             </div>
-            <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden mb-2 rotate-180">
-              <div 
-                className={`h-full transition-all duration-1000 ${isStateFlagged ? 'bg-rose-500' : 'bg-emerald-500'}`} 
-                style={{ width: `${(1 - (data.lambdaRatio || 0)) * 100}%` }} 
-              />
-            </div>
-            <p className="text-[10px] font-bold text-slate-500 italic mt-2">
-              Λ = Predicted State Prob. / Observed Trace
-            </p>
+            {isStateFlagged && (
+              <p className="text-[10px] text-rose-500 font-bold leading-relaxed italic">
+                * Claimed state {data.claimedState} implausible via Markov Gate. Verify logs.
+              </p>
+            )}
           </div>
-          {isStateFlagged && (
-            <p className="text-[10px] text-rose-500 font-bold leading-relaxed italic">
-              * Claimed state {data.claimedState} implausible via Markov Gate. Verify logs.
-            </p>
-          )}
-        </div>
 
         <Fingerprint className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-slate-900/[0.02] pointer-events-none" />
       </div>
