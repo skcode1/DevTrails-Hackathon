@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  /* RECTIFIED: Deepened colors for high-contrast on light backgrounds */
+  --text: #334155;      /* Deep Slate for body text (Slate-700) */
+  --text-h: #020617;    /* "True Ink" Black for headings (Slate-950) */
+  --bg: #ffffff;
+  --bg-subtle: #f8fafc;
+  --border: #e2e8f0;    /* Sharper borders */
+  --code-bg: #f1f5f9;
+  --accent: #0891b2;    /* Cyan-600 */
+  --accent-bg: rgba(8, 145, 178, 0.1);
+  --accent-border: rgba(8, 145, 178, 0.5);
+  
+  --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px;
+
+  /* Typography */
+  --sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --heading: 'Inter', system-ui, sans-serif;
+  --mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  font: 16px/150% var(--sans);
+  letter-spacing: -0.01em;
+  color-scheme: light;
+  color: var(--text);
+  background: var(--bg);
+  
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Dark Mode Overrides - Only active if system is in dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #cbd5e1;
+    --text-h: #f8fafc;
+    --bg: #020617;
+    --bg-subtle: #0f172a;
+    --border: #1e293b;
+    --code-bg: #1e293b;
+    --accent: #22d3ee;
+  }
+}
+
+/* Global Reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* Ensuring symbols render clearly */
+  font-variant-numeric: tabular-nums;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+/* Headings with forced darkness */
+h1, h2, h3, h4 {
+  font-family: var(--heading);
+  color: var(--text-h);
+  margin: 0;
+  font-weight: 800; /* Bolder for professional impact */
+  letter-spacing: -0.025em;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #94a3b8; /* Darker scrollbar for visibility */
+  border-radius: 10px;
+}
+
+/* Symbol Safety: Ensures symbols like η, π, σ render with correct weight */
+.math-symbol {
+  font-family: var(--sans);
+  font-style: normal;
+  font-weight: 600;
+}
