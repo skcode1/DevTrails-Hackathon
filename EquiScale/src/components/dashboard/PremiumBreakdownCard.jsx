@@ -1,112 +1,109 @@
-import { Info, ShieldCheck, Percent, Layers } from "lucide-react";
+import { Info, ShieldCheck } from "lucide-react";
+import { formatInr, formatInrHeadline } from "../../lib/formatters";
 
 /**
- * PremiumBreakdownCard - Layer 3 & 4 Visualization
- * Displays the actuarial components of the weekly premium.
+ * @param {object|null|undefined} pricing — subset of /price JSON
  */
-export default function PremiumBreakdownCard() {
-  // Mock data representing a rider's calculated premium components
-  const pricingData = {
-    purePremium: 120.50,
-    varMargin: 45.20,
-    entropyLoading: 16.30,
-    opex: 10.00,
-    total: 192.00,
-    retention: 40.00, // Amount rider pays (Deductible + Co-ins)
-    entropyScore: 0.24, // η (0 to 1)
-  };
+export default function PremiumBreakdownCard({ pricing }) {
+  const p = pricing;
+
+  if (!p) {
+    return (
+      <div className="flex flex-col h-full min-h-[200px] items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-10 text-center">
+        <p className="text-sm font-medium text-slate-600">No premium breakdown</p>
+        <p className="text-xs text-slate-400 mt-2">
+          Run pricing to populate pure premium, VaR, entropy load, and opex from the API.
+        </p>
+      </div>
+    );
+  }
+
+  const purePremium = p.pure_premium;
+  const varMargin = p.VaR;
+  const entropyLoading = p.entropy_load;
+  const opex = p.opex;
+  const total = p.premium;
+  const entropyScore = p.entropy_eta;
 
   const components = [
-    { 
-      label: "Pure Premium", 
-      value: pricingData.purePremium, 
-      
-      desc: "Actuarially fair cost of expected loss." 
+    {
+      label: "Pure Premium",
+      value: purePremium,
+      desc: "Actuarially fair cost of expected loss.",
     },
-    { 
-      label: "VaR Margin (95%)", 
-      value: pricingData.varMargin, 
-    
-      desc: "Buffer for tail-risk solvency." 
+    {
+      label: "VaR Margin (α)",
+      value: varMargin,
+      desc: "Tail buffer from discrete loss PMF at confidence α.",
     },
-    { 
-      label: "Entropy Loading", 
-      value: pricingData.entropyLoading, 
-  
-      desc: "Surcharge for Markov model uncertainty." 
+    {
+      label: "Entropy Loading",
+      value: entropyLoading,
+      desc: "λ·η·pure premium; η from Shannon entropy of π̄.",
     },
-    { 
-      label: "Operational Cost", 
-      value: pricingData.opex, 
-     
-      desc: "Platform and processing fees." 
+    {
+      label: "Operational Cost",
+      value: opex,
+      desc: "Fixed platform cost (₹).",
     },
   ];
 
   return (
     <div className="flex flex-col h-full">
-      {/* Total Premium Display */}
       <div className="mb-6">
-        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Calculated Weekly Premium</span>
-        <div className="flex items-baseline gap-1">
-        <h2 className="text-4xl font-black !text-black opacity-100 tracking-tighter leading-none">
-  ₹{pricingData.total.toFixed(2)}</h2>
-          <span className="text-sm font-medium text-slate-500">/ week</span>
-        </div>
-      </div>
-
-      {/* Breakdown List */}
-     <div className="flex-1 space-y-6">
-  {components.map((item, idx) => (
-    <div key={idx} className="relative border-l-2 border-slate-100 pl-4 py-1 hover:border-cyan-500 transition-colors">
-      <div className="flex justify-between items-start mb-1">
-        <div className="space-y-1">
-          {/* Main Label: Deep Black */}
-          <p className="text-sm font-black !text-black flex items-center gap-2 tracking-tight uppercase italic">
-            {item.label}
-            <Info className="w-3 h-3 text-slate-400 opacity-50" />
-          </p>
-          
-          {/* Actuarial Formula: Professional Mono */}
-          <div className="flex items-center gap-2">
-            <code className="text-[10px] font-bold font-mono text-cyan-700 bg-cyan-50/50 px-1.5 py-0.5 rounded border border-cyan-100/50">
-              {item.formula}
-            </code>
-          </div>
-        </div>
-
-        {/* Value: High Contrast Black */}
-        <span className="text-base font-black !text-black tabular-nums tracking-tighter leading-none">
-          ₹{item.value.toFixed(2)}
+        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          Calculated Weekly Premium
         </span>
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+          <h2 className="text-2xl sm:text-3xl font-black !text-black tracking-tight leading-none tabular-nums break-words">
+            {formatInrHeadline(total)}
+          </h2>
+          <span className="text-sm font-medium text-slate-500 shrink-0">/ week</span>
+        </div>
+        <p className="text-[10px] text-slate-400 font-mono mt-1 tabular-nums">
+          {formatInr(total)}
+        </p>
+        {entropyScore != null && (
+          <p className="text-[10px] text-slate-400 mt-1 font-mono">
+            η = {Number(entropyScore).toFixed(4)}
+          </p>
+        )}
       </div>
 
-      {/* RECTIFIED: Static Description (No longer on hover) */}
-      <p className="text-[10px] leading-relaxed text-slate-500 font-medium italic max-w-[240px]">
-        {item.desc}
-      </p>
-    </div>
-  ))}
-</div>
+      <div className="flex-1 space-y-6">
+        {components.map((item, idx) => (
+          <div
+            key={idx}
+            className="relative border-l-2 border-slate-100 pl-4 py-1 hover:border-cyan-500 transition-colors"
+          >
+            <div className="flex justify-between items-start mb-1 gap-2">
+              <div className="space-y-1 min-w-0">
+                <p className="text-sm font-black !text-black flex items-center gap-2 tracking-tight uppercase italic">
+                  {item.label}
+                  <Info className="w-3 h-3 text-slate-400 opacity-50 shrink-0" />
+                </p>
+              </div>
+              <span className="text-sm sm:text-base font-black !text-black tabular-nums tracking-tight leading-none text-right max-w-[55%] break-words">
+                {formatInr(item.value)}
+              </span>
+            </div>
+            <p className="text-[10px] leading-relaxed text-slate-500 font-medium italic max-w-[240px]">
+              {item.desc}
+            </p>
+          </div>
+        ))}
+      </div>
 
-      {/* Layer 4: Retention Insight */}
       <div className="mt-8 p-4 bg-slate-50 rounded-xl border border-dashed border-slate-300">
         <div className="flex items-center gap-2 mb-2">
           <ShieldCheck className="w-4 h-4 text-slate-600" />
-          <span className="text-xs font-bold text-slate-700 tracking-tight">Layer 4: Co-Insurance Impact</span>
+          <span className="text-xs font-bold text-slate-700 tracking-tight">
+            Layer 4: Co-insurance (ρ)
+          </span>
         </div>
-        <div className="flex justify-between text-[11px] mb-1">
-          <span className="text-slate-500 font-medium text-left">Rider Retention ρ</span>
-          <span className="font-bold text-slate-900">₹{pricingData.retention.toFixed(2)}</span>
-        </div>
-        <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
-          <div 
-            className="bg-slate-400 h-full transition-all duration-500" 
-            style={{ width: `${(pricingData.retention / (pricingData.total + pricingData.retention)) * 100}%` }} 
-          />
-        </div>
-        <p className="mt-2 text-[10px] text-slate-400 italic leading-snug">
-          Retention reduces premium by capping severe-state ($s_3$) insurer payout.
+        <p className="text-[10px] text-slate-500 italic leading-snug">
+          Insured losses are in <code className="font-mono">L_ins</code> (from{" "}
+          <code className="font-mono">L</code>, deductible, and ρ in the pricing request).
         </p>
       </div>
     </div>

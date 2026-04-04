@@ -23,18 +23,12 @@ export default function App() {
       <div className="flex flex-col flex-1 w-full bg-slate-50 min-w-0">
         <Navbar />
         
-        <main className="flex-1 overflow-y-auto p-8">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            {/* RECTIFY THIS LINE: Ensure it says 'Pricing' exactly as imported */}
-  <Route path="/pricing" element={<Pricing />} /> 
-  
-  <Route path="/fraud" element={<FraudReview />} />
-  {/* RECTIFY THIS LINE: Ensure it says 'Pricing' exactly as imported */}
- <Route path="/profile" element={<RiderProfile />} />
-  
-  
-            {/* ... other routes ... */}
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/fraud" element={<FraudReview />} />
+            <Route path="/profile" element={<RiderProfile />} />
           </Routes>
         </main>
       </div>

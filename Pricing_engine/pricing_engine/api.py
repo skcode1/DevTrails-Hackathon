@@ -4,6 +4,7 @@ import numpy as np
 
 from markov_lr import generate_synthetic_data,train_models
 from models import run_engine,fraud_check
+from default_payload import pricing_request_template, S0_RECORD_COUNT, ui_defaults
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -96,6 +97,27 @@ def _get_models():
     if "models" not in lr_models:
         raise HTTPException(status_code=503,detail="Models not ready")
     return lr_models["models"]
+
+@app.get("/")
+def root():
+    """No HTML UI here — use the EquiScale Vite app (e.g. :5173) or OpenAPI docs."""
+    return {
+        "service": app.title,
+        "version": app.version,
+        "docs": "/docs",
+        "openapi_json": "/openapi.json",
+        "get": ["/", "/health", "/pricing-defaults"],
+        "post": ["/price", "/fraud", "/price-and-fraud"],
+    }
+
+@app.get("/pricing-defaults")
+def pricing_defaults():
+    """Body template for POST /price (excluding s0_earnings) plus UI hints."""
+    return {
+        "template": pricing_request_template(),
+        "s0_record_count": S0_RECORD_COUNT,
+        "ui": ui_defaults(),
+    }
 
 @app.get("/health")
 def health():

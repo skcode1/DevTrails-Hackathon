@@ -1,71 +1,103 @@
 /**
- * Data-driven State Distribution Chart
- * Visualizes the week-averaged probability (π̄) across the 4 Markov states.
+ * @param {number[] | null | undefined} piBar — [p0..p3] from /price
  */
-export default function RiskDistributionChart() {
-  const distributionData = [
-    { state: "S₀", label: "Normal", value: 60, color: "bg-emerald-500", loss: "₹0", interval: "≥ μ − 0.5σ" },
-    { state: "S₁", label: "Mild", value: 22, color: "bg-amber-400", loss: "1.0σ", interval: "μ − 1.5σ" },
-    { state: "S₂", label: "Major", value: 12, color: "bg-orange-500", loss: "2.0σ", interval: "μ − 2.5σ" },
-    { state: "S₃", label: "Severe", value: 6, color: "bg-rose-600", loss: "3.0σ", interval: "< μ − 2.5σ" },
+export default function RiskDistributionChart({ piBar }) {
+  const template = [
+    {
+      state: "S₀",
+      label: "Normal",
+      color: "bg-emerald-500",
+      loss: "₹0",
+      interval: "≥ μ − 0.5σ",
+    },
+    {
+      state: "S₁",
+      label: "Mild",
+      color: "bg-amber-400",
+      loss: "1.0σ",
+      interval: "μ − 1.5σ",
+    },
+    {
+      state: "S₂",
+      label: "Major",
+      color: "bg-orange-500",
+      loss: "2.0σ",
+      interval: "μ − 2.5σ",
+    },
+    {
+      state: "S₃",
+      label: "Severe",
+      color: "bg-rose-600",
+      loss: "3.0σ",
+      interval: "< μ − 2.5σ",
+    },
   ];
 
+  const hasData = Array.isArray(piBar) && piBar.length === 4;
+
+  if (!hasData) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50/60 px-6 py-16 text-center">
+        <p className="text-sm font-medium text-slate-600">No π̄ data yet</p>
+        <p className="text-xs text-slate-400 mt-2 max-w-xs">
+          Run <span className="font-mono">POST /price</span> from Premium Pricing to chart state weights.
+        </p>
+      </div>
+    );
+  }
+
+  const distributionData = template.map((row, i) => {
+    const pct = Math.round(Number(piBar[i]) * 1000) / 10;
+    return { ...row, value: Math.min(100, Math.max(0, pct)) };
+  });
+
   return (
-    <div className="w-full space-y-8 p-2">
-      <div className="space-y-7">
+    <div className="w-full flex flex-col gap-6">
+      <div className="space-y-5">
         {distributionData.map((item) => (
           <div key={item.state} className="relative">
-            <div className="flex items-end justify-between mb-3">
-              <div className="flex items-center gap-3">
-                {/* State Badge: High Contrast */}
-                <span className={`flex items-center justify-center w-7 h-7 rounded-lg text-[10px] font-black text-white shadow-lg ${item.color} italic uppercase`}>
+            <div className="flex items-end justify-between gap-4 mb-2">
+              <div className="flex items-center gap-3 min-w-0">
+                <span
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[10px] font-black text-white shadow-md ${item.color} italic uppercase`}
+                >
                   {item.state}
                 </span>
-                
-                <div className="flex flex-col">
-                  <span className="text-sm font-black !text-black uppercase tracking-tight italic">
-                    {item.label} Disruption
+                <div className="flex flex-col min-w-0">
+                  <span className="text-sm font-black !text-black uppercase tracking-tight italic truncate">
+                    {item.label} disruption
                   </span>
-                  {/* Interval: Now Static and Bold */}
-                  <span className="text-[9px] font-bold font-mono text-slate-400 uppercase tracking-widest mt-0.5">
+                  <span className="text-[9px] font-bold font-mono text-slate-400 uppercase tracking-widest mt-0.5 truncate">
                     Gate: {item.interval}
                   </span>
                 </div>
               </div>
-
-              <div className="text-right flex flex-col items-end">
-                <span className="text-lg font-black !text-black tabular-nums leading-none">
+              <div className="text-right shrink-0">
+                <span className="text-base font-black !text-black tabular-nums leading-none block">
                   {item.value}%
                 </span>
-                <span className="text-[10px] font-bold text-slate-400 italic mt-1">
-                  Magnitude: {item.loss}
+                <span className="text-[10px] font-bold text-slate-400 italic mt-0.5 block">
+                  {item.loss}
                 </span>
               </div>
             </div>
 
-            {/* Production Grade Progress Track */}
-            <div className="relative w-full h-3 bg-slate-100 rounded-full border border-slate-200/50 p-[2px]">
-              <div 
-                className={`h-full rounded-full transition-all duration-1000 ease-out shadow-sm ${item.color}`}
-                style={{ width: `${item.value}%` }} 
+            <div className="relative h-2.5 w-full rounded-full bg-slate-100 border border-slate-200/80 overflow-hidden">
+              <div
+                className={`absolute left-0 top-0 h-full rounded-full transition-all duration-700 ease-out ${item.color}`}
+                style={{ width: `${item.value}%` }}
               />
-              {/* Optional: Subtle 50% marker for scale */}
-              <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-slate-200/50 z-0" />
             </div>
           </div>
         ))}
       </div>
 
-      {/* Actuarial Legend / Footer */}
-      <div className="pt-6 border-t border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <p className="text-[10px] text-slate-500 font-bold leading-relaxed max-w-sm uppercase tracking-tight">
-        
-        </p>
-        <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 rounded-full border border-slate-200">
-           <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
-           <span className="text-[9px] font-black text-slate-900 uppercase tracking-widest italic">
-             ROC Vector Synced
-           </span>
+      <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+        <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 rounded-full border border-slate-200 w-fit ml-auto">
+          <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shrink-0" />
+          <span className="text-[9px] font-black text-slate-900 uppercase tracking-widest">
+            Live π̄ (API)
+          </span>
         </div>
       </div>
     </div>
