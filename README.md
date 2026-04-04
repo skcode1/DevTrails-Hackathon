@@ -4,18 +4,67 @@
 
 ---
 
+## How to setup
+
+Run the **FastAPI** pricing engine first, then optionally the **Streamlit** demo (the Streamlit app calls the API at **http://localhost:8000**).
+
+### API server (uvicorn)
+
+Code lives under `Pricing_engine/pricing_engine/` (`api.py`).
+
+1. From the repository root: `cd Pricing_engine`
+2. Create and activate a virtual environment (recommended):
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   ```
+
+   On Windows, use `venv\Scripts\activate` instead of `source venv/bin/activate`.
+
+3. Install dependencies: `pip install -r requirements.txt`
+4. Go to the package folder and start uvicorn:
+
+   ```bash
+   cd pricing_engine
+   uvicorn api:app --reload
+   ```
+
+5. The API is served at **http://localhost:8000** (OpenAPI docs are typically at **http://localhost:8000/docs**).
+
+### Streamlit dashboard
+
+The interactive UI lives under `Streamlit/`.
+
+1. From the repository root: `cd Streamlit`
+2. Create and activate a virtual environment (recommended):
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   ```
+
+   On Windows, use `venv\Scripts\activate` instead of `source venv/bin/activate`.
+
+3. Install dependencies: `pip install -r requirements.txt`
+4. With the API already running, start the app: `streamlit run streamlit_app.py`
+5. Open the URL printed in the terminal (by default **http://localhost:8501**).
+
+---
+
 ## Table of Contents
 
-1. [Overview](#1-overview)
-2. [Model Architecture](#2-model-architecture)
-3. [Layer 1 — Data Foundation](#3-layer-1--data-foundation)
-4. [Layer 2 — Markov Chain](#4-layer-2--markov-chain)
-5. [Layer 3 — Premium Pricing](#5-layer-3--premium-pricing)
-6. [Layer 4 — Co-Insurance & Ruin Control](#6-layer-4--co-insurance--ruin-control)
-7. [Layer 5 — Fraud Detection](#7-layer-5--fraud-detection)
-8. [End-to-End Coherence](#8-end-to-end-coherence)
-9. [Parameter Reference](#9-parameter-reference)
-10. [Key Design Decisions](#10-key-design-decisions)
+1. [How to setup](#how-to-setup)
+2. [Overview](#1-overview)
+3. [Model Architecture](#2-model-architecture)
+4. [Layer 1 — Data Foundation](#3-layer-1--data-foundation)
+5. [Layer 2 — Markov Chain](#4-layer-2--markov-chain)
+6. [Layer 3 — Premium Pricing](#5-layer-3--premium-pricing)
+7. [Layer 4 — Co-Insurance & Ruin Control](#6-layer-4--co-insurance--ruin-control)
+8. [Layer 5 — Fraud Detection](#7-layer-5--fraud-detection)
+9. [End-to-End Coherence](#8-end-to-end-coherence)
+10. [Parameter Reference](#9-parameter-reference)
+11. [Key Design Decisions](#10-key-design-decisions)
 
 ---
 
