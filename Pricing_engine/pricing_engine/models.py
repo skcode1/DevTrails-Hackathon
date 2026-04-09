@@ -126,6 +126,12 @@ def price_premium(
         "opex":         C,
     }
 
+def weighted_median(values:np.ndarray,weights:np.ndarray)->float:
+    order=np.argsort(values)
+    v,w=values[order],weights[order]
+    cdf=np.cumsum(w)
+    return float(v[np.searchsorted(cdf,0.5*cdf[-1])])
+
 
 
 def fraud_check(
@@ -151,8 +157,8 @@ def fraud_check(
         Z_tilde, amount_decision, amount_action,
         Lambda, state_decision, state_action, overall
     """
-    L_med = float(np.average(L_ins, weights=pi_bar))
-    MAD   = float(np.average(np.abs(L_ins - L_med), weights=pi_bar))
+    L_med=weighted_median(L_ins,pi_bar)
+    MAD=weighted_median(np.abs(L_ins-L_med),pi_bar)
 
     if MAD < 1e-6:
         scale = float(np.sqrt(np.average((L_ins - L_med) ** 2, weights=pi_bar)))
@@ -225,7 +231,7 @@ def run_engine(
     mu, sigma, L = rider["mu"], rider["sigma"], rider["L"]
     rho_arr      = np.array(rho)
     d            = deductible_pct * L[1]
-    L_ins        = apply_coinsurance(L, rho_arr, d)
+    L_ins        = apply_coinsurance(L, d, rho)
 
     P_adj  = get_adjusted_P(features_today, lr_models)
     pi0    = np.zeros(4); pi0[current_state] = 1.0
