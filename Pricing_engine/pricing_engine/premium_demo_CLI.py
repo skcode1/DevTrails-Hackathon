@@ -255,7 +255,7 @@ def run_demo(label, s0_earnings, features_today, pi0, models,
     return result
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+
 
 if __name__ == "__main__":
 
@@ -264,7 +264,7 @@ if __name__ == "__main__":
     data   = generate_synthetic_data(n_riders=400, n_days=120)
     models = train_models(data)
 
-    # ── Rider A: stable, good day ─────────────────────────────────────────────
+   
     run_demo(
         label          = "Rider A — stable worker, good day",
         s0_earnings    = [1200, 1180, 1250, 1190, 1220, 1230, 1200,
@@ -287,7 +287,7 @@ if __name__ == "__main__":
         claimed_state  = 1,
     )
 
-    # ── Rider B: volatile worker, bad day ─────────────────────────────────────
+   
     run_demo(
         label          = "Rider B — volatile worker, bad day",
         s0_earnings    = [900, 1400, 750, 1300, 850, 1350, 700,

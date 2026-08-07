@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from pathlib import Path
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
@@ -150,6 +151,14 @@ def generate_synthetic_data(n_riders=400,n_days=120,seed=42):
     return pd.concat(dfs,ignore_index=True)
 
 
+def save_synthetic_data(data, output_path="data/simulated_rider_data.csv"):
+    """Save generated rider-history data as a CSV file and return its path."""
+    path = Path(output_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    data.to_csv(path, index=False)
+    return path
+
+
 def train_models(data):
     '''
     Train one logistic regression model per current state.
@@ -246,8 +255,10 @@ if __name__ == "__main__":
     print("=" * 60)
     print("Generating synthetic data...")
     data = generate_synthetic_data(n_riders=400, n_days=120)
+    output_path = save_synthetic_data(data)
     dist = {s: int((data["state"] == s).sum()) for s in STATES}
     print(f"Dataset: {len(data):,} rows  |  state distribution: {dist}\n")
+    print(f"Saved simulated dataset to: {output_path}\n")
  
     models = train_models(data)
  
